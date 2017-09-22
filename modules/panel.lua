@@ -239,24 +239,38 @@ pfUI:RegisterModule("panel", function ()
     end
   end
 
-  -- Update "bagspace"
-  function pfUI.panel:UpdateBagspace ()
-    local maxslots = 0
-    local usedslots = 0
-
-    for bag = 0,4 do
-      local bagsize = GetContainerNumSlots(bag)
-      maxslots = maxslots + bagsize
-      for j = 1,bagsize do
-        link = GetContainerItemLink(bag,j)
-        if link then
-          usedslots = usedslots + 1
-        end
-      end
-    end
-    local freeslots = maxslots - usedslots
-    pfUI.panel:OutputPanel("bagspace", freeslots .. " (" .. usedslots .. "/" .. maxslots .. ")", nil, OpenAllBags)
-  end
+-- Update "bagspace"
+	function pfUI.panel:UpdateBagspace ()
+		local maxslots = 0
+		local usedslots = 0
+		
+		for bag = 0,4 do
+			if self:ItIsBagPack(GetBagName(bag)) then
+				local bagsize = GetContainerNumSlots(bag)
+				maxslots = maxslots + bagsize
+				for j = 1,bagsize do
+					link = GetContainerItemLink(bag,j)
+					if link then
+						usedslots = usedslots + 1
+					end
+				end
+			end
+		end
+		
+		local freeslots = maxslots - usedslots
+		pfUI.panel:OutputPanel("bagspace", freeslots .. " (" .. usedslots .. "/" .. maxslots .. ")", nil, OpenAllBags)
+	end
+	-- Check for Special bag like Ammo pouch, shard bag etc
+	function pfUI.panel:ItIsBagPack(name)
+		if (name) then
+			for index, value in T["AMMO_POUCH_NAMES"] or T["SHARD_BAG_NAMES"] or T["PROF_BAG_NAMES"] do
+				if (string.find(name, value)) then
+					return false;
+				end
+			end
+		end
+		return true;
+	end
 
   -- Update "gold"
   function pfUI.panel:UpdateGold ()
