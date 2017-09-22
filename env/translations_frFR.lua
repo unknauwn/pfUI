@@ -351,4 +351,7 @@ pfUI_translation["frFR"] = {
   ["XP"] = nil,
   ["XP Percentage"] = "Pourcentage de la barre d'expérience",
   ["Zone Name"] = "Nom de la zone",
+  ["AMMO_POUCH_NAMES"] = {"Munitions", "Carquois", "Giberne", "Balles", "Lames", "Petite giberne", "Cartouchière de Ribbly"},
+  ["SHARD_BAG_NAMES"] = {"Bourse d'\195\162me", "Sac en gangr/195/169toffe", "Sac en coeur de gangr\195\169toffe"},
+  ["PROF_BAG_NAMES"] = {"Bourse enchant\195\169e en tissu de mage","Sac enchant/195/169 en \195\169toffe runique","Sac d'herbes c\195\169narien","Sacoche de C\195\169narius"},
 }
