@@ -239,24 +239,38 @@ pfUI:RegisterModule("panel", function ()
     end
   end
 
-  -- Update "bagspace"
-  function pfUI.panel:UpdateBagspace ()
-    local maxslots = 0
-    local usedslots = 0
-
-    for bag = 0,4 do
-      local bagsize = GetContainerNumSlots(bag)
-      maxslots = maxslots + bagsize
-      for j = 1,bagsize do
-        link = GetContainerItemLink(bag,j)
-        if link then
-          usedslots = usedslots + 1
-        end
-      end
-    end
-    local freeslots = maxslots - usedslots
-    pfUI.panel:OutputPanel("bagspace", freeslots .. " (" .. usedslots .. "/" .. maxslots .. ")", nil, OpenAllBags)
-  end
+  	-- Update "bagspace"
+	function pfUI.panel:UpdateBagspace ()
+		local maxslots = 0
+		local usedslots = 0
+		
+		for bag = 0,4 do
+			if self:ItIsBagPack(GetBagName(bag), bag) then
+				local bagsize = GetContainerNumSlots(bag)
+				maxslots = maxslots + bagsize
+				for j = 1,bagsize do
+					link = GetContainerItemLink(bag,j)
+					if link then
+						usedslots = usedslots + 1
+					end
+				end
+			end
+		end
+		
+		local freeslots = maxslots - usedslots
+		pfUI.panel:OutputPanel("bagspace", freeslots .. " (" .. usedslots .. "/" .. maxslots .. ")", nil, OpenAllBags)
+	end
+	-- Check for Special bag like Quiver Bag, SoulBag etc
+	function pfUI.panel:ItIsBagPack(name, bag)
+		if (name) then
+			local _, _, id = string.find(GetInventoryItemLink("player", ContainerIDToInventoryID(bag)) or "", "item:(%d+)")
+			local _, _, _, _, itemType, subType = GetItemInfo(id)
+			if(L["bagtypes"][subType] == "QUIVER" or L["bagtypes"][subType] == "SOULBAG") then
+				return false;
+			end
+		end
+		return true;
+	end
 
   -- Update "gold"
   function pfUI.panel:UpdateGold ()
